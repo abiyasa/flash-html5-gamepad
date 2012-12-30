@@ -49,23 +49,33 @@ package
 			
 			_message = 'dummy text';
 			
-			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			testExternalInterface();
-		}
-		
-		private function testExternalInterface():void
-		{
-			if (!ExternalInterface.available)
+			if (ExternalInterface.available)
+			{
+				// start pooling
+				this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			}
+			else
 			{
 				_message = 'External interface is NOT avaible. Cannot test game pad';
+				_textInput.text = _message;
 			}
 		}
 		
 		private function onEnterFrame(event:Event):void
 		{
 			// TODO gameinput polling
+			var result:Object;
+			try
+			{
+				result = ExternalInterface.call('testJSFunc');
+			}
+			catch (e:Error)
+			{
+				result = e.toString();
+			}
 			
 			// TODO update message
+			_message = result == null ? 'ERROR' : String(result);
 			
 			// show
 			_textInput.text = _message;
