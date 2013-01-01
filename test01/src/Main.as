@@ -49,16 +49,42 @@ package
 			
 			_message = 'dummy text';
 			
-			if (ExternalInterface.available)
-			{
-				// start pooling
-				this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			}
-			else
+			if (!ExternalInterface.available)
 			{
 				_message = 'External interface is NOT available. Cannot test game pad';
 				_textInput.text = _message;
+				return;
 			}
+			
+			// init gamepad
+			var result:Boolean = initGamePad();
+			if (!result)
+			{
+				_message = 'Failed to init gamepad';
+				_textInput.text = _message;
+				return;
+			}
+			
+			startPooling();
+		}
+		
+		private function initGamePad():Boolean
+		{
+			var result:Boolean;
+			try
+			{
+				result = Boolean(ExternalInterface.call('FlashGamePad.init'));
+			}
+			catch (e:Error)
+			{
+				result = false;
+			}
+			return result;
+		}
+		
+		private function startPooling():void
+		{
+			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
 		private function onEnterFrame(event:Event):void
@@ -67,7 +93,7 @@ package
 			var result:Object;
 			try
 			{
-				result = ExternalInterface.call('FlashGamePad.testJSFunc');
+				result = ExternalInterface.call('FlashGamePad.poolStatus');
 			}
 			catch (e:Error)
 			{
