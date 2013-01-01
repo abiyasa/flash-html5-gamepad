@@ -7,5 +7,4 @@
 var connect = require('connect');
 var server = connect()
   .use(connect.static(__dirname))
-  .use(connect.logger('dev'))
   .listen(9000);
