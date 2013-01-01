@@ -56,7 +56,7 @@ package
 			}
 			else
 			{
-				_message = 'External interface is NOT avaible. Cannot test game pad';
+				_message = 'External interface is NOT available. Cannot test game pad';
 				_textInput.text = _message;
 			}
 		}
@@ -67,7 +67,7 @@ package
 			var result:Object;
 			try
 			{
-				result = ExternalInterface.call('testJSFunc');
+				result = ExternalInterface.call('FlashGamePad.testJSFunc');
 			}
 			catch (e:Error)
 			{
