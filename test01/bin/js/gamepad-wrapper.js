@@ -38,8 +38,19 @@ FlashGamePad.init = function () {
 	return FlashGamePad._gamepad.init();
 };
 
-FlashGamePad.poolStatus = function () {
-	console.log('poolStatus()=', FlashGamePad._isConnected);
-	
+/**
+ * Check if the game is connected
+ */
+FlashGamePad.isConnected = function () {
 	return FlashGamePad._isConnected;
-}
+};
+
+/**
+ * Update the latest gamepad button status
+ */
+FlashGamePad.update = function () {
+	console.log('update(), connected=', FlashGamePad._isConnected);
+	if (FlashGamePad._isConnected) {
+		// TODO get the button status
+	}
+};

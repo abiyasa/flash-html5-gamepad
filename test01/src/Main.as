@@ -89,19 +89,21 @@ package
 		
 		private function onEnterFrame(event:Event):void
 		{
-			// TODO gameinput polling
-			var result:Object;
-			try
-			{
-				result = ExternalInterface.call('FlashGamePad.poolStatus');
-			}
-			catch (e:Error)
-			{
-				result = e.toString();
-			}
+			// update gamepad
+			ExternalInterface.call('FlashGamePad.update');
 			
-			// TODO update message
-			_message = result == null ? 'ERROR' : String(result);
+			var isConnected:Boolean = Boolean(ExternalInterface.call('FlashGamePad.isConnected'));
+			if (isConnected)
+			{
+				_message = 'Gamepad is detected.';
+				
+				// TODO gameinput polling
+				
+			}
+			else  // gameoad is not conneced
+			{
+				_message = 'Gamepad is not detected. Try to press any gamepad\'s button';
+			}
 			
 			// show
 			_textInput.text = _message;
