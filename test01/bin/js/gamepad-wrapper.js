@@ -42,15 +42,47 @@ FlashGamePad.init = function () {
  * Check if the game is connected
  */
 FlashGamePad.isConnected = function () {
+	//console.log('isConnected() = ' + FlashGamePad._isConnected);
 	return FlashGamePad._isConnected;
 };
 
 /**
- * Update the latest gamepad button status
+ * Update the latest gamepad button status.
+ * Make sure that the gamepad is connected.
+ * will return the button status as an object
  */
 FlashGamePad.update = function () {
 	console.log('update(), connected=', FlashGamePad._isConnected);
+	var result = null;
+	
 	if (FlashGamePad._isConnected) {
-		// TODO get the button status
+		// get the button status
+		result = {};
+		var gamepads = FlashGamePad._gamepad.gamepads, i, control, gamepadStatus;
+		//console.log('there are ' + gamepads.length  + ' gamepad detected');
+		for (i = 0; i < gamepads.length; i++) {
+			if (typeof(gamepads[i]) == 'undefined') {
+				console.log('gamepad-' + i + ' is undefined');
+				continue;
+			}
+			
+			gamepadStatus = {};
+			for (control in gamepads[i].state) {
+				gamepadStatus[control] = gamepads[i].state[control];
+			}
+			result['pad-' + i] = gamepadStatus;
+		}
 	}
+	
+	return result;
+};
+
+/**
+ * To test pass JSON object, which will be modified by the function
+ */
+FlashGamePad.testByReference = function (param) {
+	if (param) {
+		param.danke = 'bitte';
+	}
+	return param;
 };
