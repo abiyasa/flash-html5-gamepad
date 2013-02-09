@@ -49,10 +49,10 @@ FlashGamePad.isConnected = function () {
 /**
  * Update the latest gamepad button status.
  * Make sure that the gamepad is connected.
- * will return the button status as an object
+ * will return the gamepad status (buttons, axis) as an object
  */
 FlashGamePad.update = function () {
-	console.log('update(), connected=', FlashGamePad._isConnected);
+	//console.log('update(), connected=', FlashGamePad._isConnected);
 	var result = null;
 	
 	if (FlashGamePad._isConnected) {
@@ -75,14 +75,4 @@ FlashGamePad.update = function () {
 	}
 	
 	return result;
-};
-
-/**
- * To test pass JSON object, which will be modified by the function
- */
-FlashGamePad.testByReference = function (param) {
-	if (param) {
-		param.danke = 'bitte';
-	}
-	return param;
 };
