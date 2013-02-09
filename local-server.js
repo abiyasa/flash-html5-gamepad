@@ -5,6 +5,10 @@
  * How to run: node local-server.js
  */
 var connect = require('connect');
+
+var PORT_NUM = 9000;
 var server = connect()
   .use(connect.static(__dirname))
-  .listen(9000);
+  .listen(PORT_NUM);
+
+console.log('local server started at port', PORT_NUM);
