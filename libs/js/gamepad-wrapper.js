@@ -12,7 +12,7 @@ FlashGamePad._isConnected = false;
 FlashGamePad.init = function () {
 	console.log('init gamepad');
 	
-	// only 1 gamepad instance allowed
+	// Note: only 1 gamepad instance allowed this time
 	var gamepad = FlashGamePad._gamepad;
 	if (!gamepad) {
 		gamepad = new Gamepad();
@@ -49,7 +49,9 @@ FlashGamePad.isConnected = function () {
 /**
  * Update the latest gamepad button status.
  * Make sure that the gamepad is connected.
- * will return the gamepad status (buttons, axis) as an object
+ * will return the gamepad status (buttons, axis) as an object.
+ *
+ * return null if the gamepad is not connected
  */
 FlashGamePad.update = function () {
 	//console.log('update(), connected=', FlashGamePad._isConnected);
