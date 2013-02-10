@@ -1,60 +1,80 @@
-HTML5-JavaScript-Gamepad-Controller-Library
-===========================================
+# Flash-HTML5-Gamepad
 
-**Library for accessing gamepads in modern browsers.**
+Gamepad API for Flash. This API enables Flash to connect to the HTML5's Gamepad API using
+[kallaspriit library](https://github.com/kallaspriit/HTML5-JavaScript-Gamepad-Controller-Library)
+and Flash's ExternalInterface.
 
+## Current Status
+
+Still in Alpha and experimental version. Use carefully!
 * Works on latest Firefox and Google Chrome.
-* Very easy to add mappings to new controllers.
-* Lightweight.
-* Includes settings for deadzone and maximization.
-* Simple event-based system.
-* Minimal working example provided.
-* Does not depend on any other library.
-* Includes minimized version.
+* So far tested only using XBOX wired gamepad
 
+## How to use
 
-How to use
-----------
-* Include the library.
+* On `index.html`, include the JavaScript scripts.
 ```javascript
-	<script src="gamepad.js"></script>
+    <script src="libs/js/gamepad.min.js"></script>
+    <script src="libs/js/gamepad-wrapper.js"></script>
 ```
 
-* Create an instance of the Gamepad class.
-```javascript
-	var gamepad = new Gamepad();`
+* On the ActionScript main file, you want to make sure that the GamePad API is accessable.
+The Gamepad API only works if you run the Flash application ON the browser.
+Running the Flash app using the debugger or FLash projector will not work!
+```actionscript
+    import flashgamepad.FlashGamePad;
+
+    ...
+
+    if (!FlashGamePad.available)
+    {
+        trace('Gamepad API is not accessable');
+        return;
+    }
 ```
 
-* Bind to the events
-```javascript
-	gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
-		// a new gamepad connected
-	});
+* Create an instance of the Gamepad class & init
+```actionscript
+    var _gamepad = new Gamepad();
+    var success:Boolean = _gamepad.init();
+    if (!success)
+    {
+        trace('Gamepad initiation failed!');
+        return;
+    }
 
-	gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
-		// gamepad disconnected
-	});
-
-	gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
-		// an unsupported gamepad connected (add new mapping)
-	});
-
-	gamepad.bind(Gamepad.Event.TICK, function(gamepads) {
-		// gamepads were updated (around 60 times a second)
-	});
 ```
 
-* Initilize the gamepads
-```javascript
-	if (!gamepad.init()) {
-		// Your browser does not support gamepads, get the latest Google Chrome or Firefox
-	}
+* Call get gamepad status on each frame
+```actionscript
+    this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+
+    ...
+
+    private function onEnterFrame(event:Event):void
+    {
+        // update gamepad & get status
+        var poolResult:Object = _gamepad.getStatus();
+        if (poolResult == null)
+        {
+            // failed to get input, might need to press button to trigger
+            trace('Gamepad is not detected. Try to press any gamepad\'s button');
+        }
+        else  // get gamepad status object
+        {
+            // show gamepad status object
+            var resultStr:String = '';
+            for each (var gamepadStatus:Object in poolResult)
+            {
+                resultStr += 'gamepad=' + gamepadStatus.type + '\n';
+                for (var control:Object in gamepadStatus)
+                {
+                    resultStr += '  ' + control + '=' + gamepadStatus[control] + '\n';
+                }
+            }
+            trace(resultStr);
+        }
+    }
+
+}
 ```
-
-* Try the working example in index.html for more tips
-
-
-Changelog
----------
-30.09.2012 - Removed included jQuery, commented the code, added minimized version, updated readme
-28.09.2012 - Updated the library to work with Chrome 22+, still works with version 21 too.
