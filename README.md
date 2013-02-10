@@ -42,7 +42,6 @@ Running the Flash app using the debugger or FLash projector will not work!
         trace('Gamepad initiation failed!');
         return;
     }
-
 ```
 
 * Call get gamepad status on each frame
@@ -75,6 +74,4 @@ Running the Flash app using the debugger or FLash projector will not work!
             trace(resultStr);
         }
     }
-
-}
 ```
