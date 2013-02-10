@@ -4,7 +4,6 @@ package
 	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	import flash.external.ExternalInterface;
 	import flashgamepad.FlashGamePad;
 	
 	/**
@@ -79,7 +78,7 @@ package
 		private function onEnterFrame(event:Event):void
 		{
 			// update gamepad & get status
-			var poolResult:Object = ExternalInterface.call('FlashGamePad.update');
+			var poolResult:Object = _gamepad.getStatus();
 			if (poolResult == null)
 			{
 				// failed to ge input
