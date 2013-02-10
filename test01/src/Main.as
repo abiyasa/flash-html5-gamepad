@@ -5,6 +5,7 @@ package
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.external.ExternalInterface;
+	import flashgamepad.FlashGamePad;
 	
 	/**
 	 * Simple gamepad.js tester
@@ -14,6 +15,7 @@ package
 	{
 		private var _textInput:TextField;
 		private var _message:String;
+		private var _gamepad:FlashGamePad;
 		
 		public function Main():void
 		{
@@ -49,15 +51,16 @@ package
 			
 			_message = 'dummy text';
 			
-			if (!ExternalInterface.available)
+			if (!FlashGamePad.available)
 			{
-				_message = 'External interface is NOT available. Cannot test game pad';
+				_message = 'FLash GamePad API is NOT available. Cannot test game pad';
 				_textInput.text = _message;
 				return;
 			}
 			
 			// init gamepad
-			var result:Boolean = initGamePad();
+			_gamepad = new FlashGamePad();
+			var result:Boolean = _gamepad.init();
 			if (!result)
 			{
 				_message = 'Failed to init gamepad';
@@ -67,21 +70,7 @@ package
 			
 			startPooling();
 		}
-		
-		private function initGamePad():Boolean
-		{
-			var result:Boolean;
-			try
-			{
-				result = Boolean(ExternalInterface.call('FlashGamePad.init'));
-			}
-			catch (e:Error)
-			{
-				result = false;
-			}
-			return result;
-		}
-		
+
 		private function startPooling():void
 		{
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -89,34 +78,26 @@ package
 		
 		private function onEnterFrame(event:Event):void
 		{
-			var isConnected:Boolean = Boolean(ExternalInterface.call('FlashGamePad.isConnected'));
-			if (isConnected)
+			// update gamepad & get status
+			var poolResult:Object = ExternalInterface.call('FlashGamePad.update');
+			if (poolResult == null)
 			{
-				// update gamepad & get status
-				var poolResult:Object = ExternalInterface.call('FlashGamePad.update');
-				if (poolResult == null)
-				{
-					// failed to ge input
-					_message = 'Failed to get Gamepad status';
-				}
-				else
-				{
-					// show result
-					var resultStr:String = '';
-					for each (var gamepadStatus:Object in poolResult)
-					{
-						resultStr += 'gamepad';
-						for (var control:Object in gamepadStatus)
-						{
-							resultStr += '  ' + control + '=' + gamepadStatus[control] + '\n';
-						}
-					}
-					_message = resultStr;
-				}
-			}
-			else  // gamepad is not conneced
-			{
+				// failed to ge input
 				_message = 'Gamepad is not detected. Try to press any gamepad\'s button';
+			}
+			else
+			{
+				// show result
+				var resultStr:String = '';
+				for each (var gamepadStatus:Object in poolResult)
+				{
+					resultStr += 'gamepad';
+					for (var control:Object in gamepadStatus)
+					{
+						resultStr += '  ' + control + '=' + gamepadStatus[control] + '\n';
+					}
+				}
+				_message = resultStr;
 			}
 			
 			// show

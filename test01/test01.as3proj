@@ -15,6 +15,7 @@
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
+    <class path="..\libs\as3" />
     <class path="src" />
   </classpaths>
   <!-- Build options -->
