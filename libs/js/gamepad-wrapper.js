@@ -72,6 +72,10 @@ FlashGamePad.update = function () {
 			for (control in gamepads[i].state) {
 				gamepadStatus[control] = gamepads[i].state[control];
 			}
+			
+			// get gamepad type
+			gamepadStatus.type = gamepads[i].type;
+			
 			result['pad-' + i] = gamepadStatus;
 		}
 	}

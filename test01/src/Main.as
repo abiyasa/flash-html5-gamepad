@@ -91,7 +91,7 @@ package
 				var resultStr:String = '';
 				for each (var gamepadStatus:Object in poolResult)
 				{
-					resultStr += 'gamepad';
+					resultStr += 'gamepad=' + gamepadStatus.type + '\n';
 					for (var control:Object in gamepadStatus)
 					{
 						resultStr += '  ' + control + '=' + gamepadStatus[control] + '\n';
